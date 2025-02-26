@@ -1,6 +1,6 @@
 import { IProduct, IProductStore } from "@/types";
 import { create } from "zustand";
-const API_URL = import.meta.env.VITE_API_URL;
+import { axiosInstance } from "@/lib/axios";
 
 export const useProductStore = create<IProductStore>((set) => ({
   products: [],
@@ -11,72 +11,81 @@ export const useProductStore = create<IProductStore>((set) => ({
   createProduct: async (newProduct: IProduct) => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(`${API_URL}/api/products`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newProduct),
-      });
-      if (!res.ok) throw new Error("Failed to create product");
-      const { data, message } = await res.json();
-      set((state) => ({ products: [...state.products, data], loading: false }));
-      return { success: true, message };
+      const { data } = await axiosInstance.post("/api/products", newProduct);
+      set((state) => ({
+        products: [...state.products, data.data],
+        loading: false,
+      }));
+      return { success: true, message: data.message };
     } catch (error: any) {
-      set({ loading: false, error: error.message });
-      return { success: false, message: error.message };
+      set({
+        loading: false,
+        error: error.response?.data?.message || error.message,
+      });
+      return {
+        success: false,
+        message: error.response?.data?.message || error.message,
+      };
     }
   },
 
   fetchProducts: async () => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(`${API_URL}/api/products`);
-      if (!res.ok) throw new Error("Failed to fetch products");
-      const { data } = await res.json();
-      set({ products: data, loading: false });
+      const { data } = await axiosInstance.get("/api/products");
+      set({ products: data.data, loading: false });
     } catch (error: any) {
-      set({ loading: false, error: error.message });
+      set({
+        loading: false,
+        error: error.response?.data?.message || error.message,
+      });
     }
   },
 
   editProduct: async (id: string, updatedProduct: IProduct) => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(`${API_URL}/api/products/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedProduct),
-      });
-      if (!res.ok) throw new Error("Failed to update product");
-      const { data, message } = await res.json();
+      const { data } = await axiosInstance.put(
+        `/api/products/${id}`,
+        updatedProduct
+      );
       set((state) => ({
         products: state.products.map((product) =>
-          product._id === data._id ? data : product
+          product._id === data.data._id ? data.data : product
         ),
         loading: false,
       }));
-      return { success: true, message };
+      return { success: true, message: data.message };
     } catch (error: any) {
-      set({ loading: false, error: error.message });
-      return { success: false, message: error.message };
+      set({
+        loading: false,
+        error: error.response?.data?.message || error.message,
+      });
+      return {
+        success: false,
+        message: error.response?.data?.message || error.message,
+      };
     }
   },
 
   deleteProduct: async (id: string) => {
     set({ loading: true, error: null });
     try {
-      const res = await fetch(`${API_URL}/api/products/${id}`, {
-        method: "DELETE",
-      });
-      if (!res.ok) throw new Error("Failed to delete product");
-      const { message } = await res.json();
+      const { data } = await axiosInstance.delete(`/api/products/${id}`);
       set((state) => ({
         products: state.products.filter((p) => p._id !== id),
         loading: false,
       }));
-      return { success: true, message };
+      return { success: true, message: data.message };
     } catch (error: any) {
-      set({ loading: false, error: error.message });
-      return { success: false, message: error.message };
+      set({
+        loading: false,
+        error: error.response?.data?.message || error.message,
+      });
+      return {
+        success: false,
+        message: error.response?.data?.message || error.message,
+      };
     }
   },
 }));

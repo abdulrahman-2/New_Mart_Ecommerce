@@ -22,7 +22,7 @@ const ProductPage = () => {
   const product = products.find((item) => item._id === id);
   return (
     <Container my={"20px"}>
-      <VStack gap={5}>
+      <VStack>
         <CustomText
           title="Product Details 🚀"
           isLink={false}
@@ -32,10 +32,10 @@ const ProductPage = () => {
         <HStack
           display={"flex"}
           flexDirection={{ base: "column", lg: "row" }}
-          alignItems={"center"}
+          alignItems={{ base: "flex-start", lg: "center" }}
           justifyContent={"space-between"}
           gap={10}
-          my={10}
+          my={5}
         >
           <Image
             src={product?.image}
@@ -81,8 +81,12 @@ const ProductPage = () => {
             </Box>
 
             <HStack mt={4}>
-              <Button size="md">Add to Cart</Button>
-              <Button size="md">Buy Now</Button>
+              <Button size="md" px={"5"}>
+                Add to Cart
+              </Button>
+              <Button size="md" px={"5"}>
+                Buy Now
+              </Button>
             </HStack>
           </Box>
         </HStack>

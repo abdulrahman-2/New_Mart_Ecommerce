@@ -2,12 +2,7 @@ import { ICustomText } from "@/types";
 import { Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
-const CustomText = ({
-  title,
-  isLink,
-  baseSize,
-  smSize,
-}: ICustomText) => {
+const CustomText = ({ title, isLink, href, baseSize, smSize }: ICustomText) => {
   return (
     <Text
       fontSize={{ base: baseSize, sm: smSize }}
@@ -19,7 +14,7 @@ const CustomText = ({
       gradientTo="blue.500"
       bgClip="text"
     >
-      {isLink ? <Link to="/">{title}</Link> : title}
+      {isLink ? <Link to={href || "/"}>{title}</Link> : title}
     </Text>
   );
 };

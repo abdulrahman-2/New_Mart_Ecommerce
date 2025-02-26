@@ -1,7 +1,10 @@
 import { useProductStore } from "@/store/product";
-import ProductForm from "@/components/forms/ProductForm";
 import CustomText from "@/components/shared/CustomText";
 import { toaster } from "../ui/toaster";
+import { addProductFields } from "../forms/inputsFields";
+import UseFormGeneric from "../forms/UseFormGeneric";
+import { Box } from "@chakra-ui/react";
+import { createAndUpdateSchema } from "@/schema/zod";
 
 const CreateProduct = () => {
   const { createProduct, loading, error } = useProductStore();
@@ -19,12 +22,16 @@ const CreateProduct = () => {
         baseSize="22px"
         smSize="26px"
       />
-      <ProductForm
-        onSubmit={handleCreate}
-        loading={loading}
-        error={error || ""}
-        buttonText="Submit"
-      />
+      <Box>
+        <UseFormGeneric
+          onSubmit={handleCreate}
+          schema={createAndUpdateSchema}
+          loading={loading}
+          buttonText="Add Product"
+          formFields={addProductFields}
+          error={error || ""}
+        />
+      </Box>
     </div>
   );
 };

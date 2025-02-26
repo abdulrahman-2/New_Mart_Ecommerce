@@ -2,10 +2,19 @@ import { Box, Button, Container, Flex, Stack } from "@chakra-ui/react";
 import { FiShoppingCart } from "react-icons/fi";
 
 import { Link } from "react-router-dom";
-import ModeToggle from "./ModeToggle";
 import CustomText from "./CustomText";
+import CustomDropdown from "./CustomDropdown";
+import { useUserStore } from "@/store/user";
+import { useEffect } from "react";
 
 const Header = () => {
+  const { isLoggedIn, getUser, user } = useUserStore();
+
+  useEffect(() => {
+    if (isLoggedIn && !user) {
+      getUser();
+    }
+  }, [isLoggedIn, user, getUser]);
   return (
     <Box
       w="100%"
@@ -24,19 +33,21 @@ const Header = () => {
             smSize="26px"
           />
           <Stack direction="row" alignItems="center">
-            <Link to="/admin">
-              <Button variant="outline" size="sm" px={3}>
-                Admin
-              </Button>
-            </Link>
+            {user?.isAdmin && (
+              <Link to="/admin">
+                <Button variant="outline" size="sm" px={3}>
+                  Admin
+                </Button>
+              </Link>
+            )}
 
             <Link to="/cart">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" p={0}>
                 <FiShoppingCart size={20} />
               </Button>
             </Link>
 
-            <ModeToggle />
+            <CustomDropdown />
           </Stack>
         </Flex>
       </Container>

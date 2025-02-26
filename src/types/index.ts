@@ -1,3 +1,5 @@
+import { DefaultValues, FieldValues } from "react-hook-form";
+
 export interface IProduct {
   _id?: string;
   name: string;
@@ -11,6 +13,7 @@ export interface IProduct {
 export interface ICustomText {
   title: string;
   isLink?: boolean;
+  href?: string;
   baseSize?: string;
   smSize?: string;
 }
@@ -29,4 +32,48 @@ export interface IProductStore {
     id: string,
     updatedProduct: IProduct
   ) => Promise<{ success: boolean; message: string }>;
+}
+
+export interface FieldConfig {
+  name: string;
+  label: string;
+  type: "text" | "textarea" | "number" | "password" | "file";
+  placeholder?: string;
+  step?: string;
+  resize?: "none" | "vertical" | "horizontal" | "both";
+}
+
+export interface ProductFormProps<T extends FieldValues> {
+  initialValues?: DefaultValues<T>;
+  onSubmit: (data: T) => Promise<void>;
+  loading: boolean;
+  error?: string;
+  buttonText: string;
+  formFields: FieldConfig[];
+  schema?: any;
+}
+
+export interface IUser {
+  name: string;
+  email: string;
+  isAdmin: boolean;
+}
+
+export interface IUserStore {
+  user: IUser | null;
+  isLoggedIn: boolean;
+  loading: boolean;
+  error: any;
+  setUser: (user: any) => void;
+  createUser: (data: any) => Promise<{ success: boolean; message: string }>;
+  loginUser: (data: any) => Promise<{ success: boolean; message: string }>;
+  logoutUser: () => Promise<{ success: boolean; message: string }>;
+  getUser: () => void;
+}
+
+export interface IRegisterFormValues {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
 }

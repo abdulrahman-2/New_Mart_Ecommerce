@@ -12,9 +12,11 @@ import {
 } from "@/components/ui/dialog";
 import { useProductStore } from "@/store/product";
 import { IProduct } from "@/types";
-import ProductForm from "@/components/forms/ProductForm";
 import { toaster } from "@/components/ui/toaster";
 import { Button } from "@chakra-ui/react";
+import UseFormGeneric from "@/components/forms/UseFormGeneric";
+import { addProductFields } from "@/components/forms/inputsFields";
+import { createAndUpdateSchema } from "@/schema/zod";
 
 const EditDialog = ({ product }: { product: IProduct }) => {
   const { editProduct, loading, error } = useProductStore();
@@ -40,7 +42,9 @@ const EditDialog = ({ product }: { product: IProduct }) => {
           <DialogTitle>Edit Product</DialogTitle>
         </DialogHeader>
         <DialogBody pb="4">
-          <ProductForm
+          <UseFormGeneric
+            schema={createAndUpdateSchema}
+            formFields={addProductFields}
             initialValues={product}
             onSubmit={handleEdit}
             loading={loading}
