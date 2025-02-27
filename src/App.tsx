@@ -10,6 +10,8 @@ import SignUp from "./pages/SignUp";
 import SignIn from "./pages/SignIn";
 import PublicRoutes from "./utils/PublicRoutes";
 import ProtectedRoutes from "./utils/ProtectedRoutes";
+import Success from "./pages/Success";
+import Cancel from "./pages/Cancel";
 
 const App = () => {
   return (
@@ -20,6 +22,8 @@ const App = () => {
         <Route path="/" element={<HomePage />} />
         <Route path="/product/:id" element={<ProductPage />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/success" element={<Success />} />
+        <Route path="/cancel" element={<Cancel />} />
 
         <Route element={<ProtectedRoutes />}>
           <Route path="/admin" element={<AdminPage />} />

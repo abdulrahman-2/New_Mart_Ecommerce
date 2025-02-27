@@ -8,6 +8,7 @@ export interface IProduct {
   discount: number;
   category: string;
   image: string;
+  quantity?: number;
 }
 
 export interface ICustomText {
@@ -76,4 +77,16 @@ export interface IRegisterFormValues {
   email: string;
   password: string;
   confirmPassword: string;
+}
+
+export interface ICartStore {
+  cart: IProduct[];
+  loading: boolean;
+  error: string | null;
+  setCart: (cart: IProduct[]) => void;
+  addToCart: (product: IProduct) => void;
+  removeFromCart: (id: string) => void;
+  clearCart: () => void;
+  incrementQuantity: (id: string) => void;
+  decrementQuantity: (id: string) => void;
 }

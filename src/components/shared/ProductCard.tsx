@@ -1,19 +1,39 @@
+import { useCartStore } from "@/store/cart";
 import { IProduct } from "@/types";
 import { Box, Button, Image, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
+import { toaster } from "../ui/toaster";
 
-const ProductCard = ({ _id, name, price, discount, image }: IProduct) => {
+interface ProductCardProps {
+  product: IProduct;
+}
+
+const ProductCard = ({ product }: ProductCardProps) => {
+  const { cart, addToCart } = useCartStore();
+
+  const cartItem = cart.find((item) => item._id === product._id);
+
+  const { _id, name, image, price, discount } = product;
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    toaster.create({
+      title: `${name.slice(0, 15)} added to cart`,
+      type: "success",
+    });
+  };
+
   return (
     <Box
       shadow={"lg"}
       rounded={"lg"}
       overflow={"hidden"}
       transition={"all 0.5s"}
-      _hover={{ transform: "translateY(-5px) ", shadow: "xl" }}
+      _hover={{ transform: "translateY(-8px) ", shadow: "xl" }}
       bg={{ base: "gray.100", _dark: "gray.800" }}
     >
       <Link to={`/product/${_id}`}>
-        <Image src={image} alt={name} h={"52"} w={"full"} />
+        <Image src={image} alt={name} h={"52"} w={"full"} objectFit="cover" />
       </Link>
       <Box p={3} spaceY={3}>
         <Text
@@ -45,11 +65,13 @@ const ProductCard = ({ _id, name, price, discount, image }: IProduct) => {
           bgGradient="to-r"
           gradientFrom="gray.600"
           gradientTo="gray.800"
-          color={"white"}
+          color={cartItem ? "green.500" : "white"}
           fontWeight={"bold"}
+          border={"none"}
           w={"full"}
+          onClick={handleAddToCart}
         >
-          Add to cart
+          {cartItem ? "Added to cart" : "Add to cart"}
         </Button>
       </Box>
     </Box>

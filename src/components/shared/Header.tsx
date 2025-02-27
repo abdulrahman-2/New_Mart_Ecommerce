@@ -6,9 +6,11 @@ import CustomText from "./CustomText";
 import CustomDropdown from "./CustomDropdown";
 import { useUserStore } from "@/store/user";
 import { useEffect } from "react";
+import { useCartStore } from "@/store/cart";
 
 const Header = () => {
   const { isLoggedIn, getUser, user } = useUserStore();
+  const { cart } = useCartStore();
 
   useEffect(() => {
     if (isLoggedIn && !user) {
@@ -44,6 +46,19 @@ const Header = () => {
             <Link to="/cart">
               <Button variant="outline" size="sm" p={0}>
                 <FiShoppingCart size={20} />
+                <Box
+                  bgGradient="to-r"
+                  gradientFrom="cyan.400"
+                  gradientTo="blue.500"
+                  bgClip="text"
+                  fontWeight={"bold"}
+                  position={"absolute"}
+                  top={-1}
+                  right={-1}
+                  ml={2}
+                >
+                  {cart.length}
+                </Box>
               </Button>
             </Link>
 

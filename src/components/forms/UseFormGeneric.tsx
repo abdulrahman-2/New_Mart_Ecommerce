@@ -75,6 +75,7 @@ const UseFormGeneric = <T extends FieldValues>({
           gradientTo="blue.800"
           color={"white"}
           fontSize={"md"}
+          border={"none"}
           type="submit"
         >
           {loading ? <Spinner /> : buttonText}
